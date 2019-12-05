@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.okayokya.userService.dao.UserDao">
+    <!-- <cache type="org.mybatis.caches.memcached.MemcachedCache" /> -->
+<!--    用户注册 -->
+    <insert id="register" parameterType="User">
+	insert into user(id,deleted,account,password,mobile,reg_type,email,nickname,icon_path,status,active_key,age,gender,points)
+	values(#{id},#{deleted},#{account},#{password},#{mobile},#{regType},#{email},#{nickname},#{iconPath},#{status},#{activeKey},#{age},#{gender},#{points})
+ </insert>
+    <!-- 用户登录 -->
+    <select id="login" parameterType="User" resultType="User">
+        select
+        id AS id
+        ,email AS email
+        ,account as account
+        ,password as password
+        ,mobile as mobile
+        ,reg_date as regDate
+        ,reg_type as regType
+        ,nickname AS nickname
+        ,status as status
+        ,active_key as activeKey
+        from
+        User
+        <where>
+            <if test="id != null">
+                id = #{id}
+            </if>
+            <if test="id == null">
+                (
+                account=#{account}
+                OR email=#{account}
+                )
+                AND
+                password=#{password}
+            </if>
+            <!-- 已经激活的用户 -->
+            AND status = 1
+            AND deleted=0
+        </where>
+    </select>
+
+    <update id="useBenefits" parameterType="map">
+        update User u
+        <if test="couponId != null">
+            join Coupon c on (u.id = c.user_id)
+            set c.invailide = 1
+        </if>
+        <if test="points != null">
+            set u.points = u.points - #{points}
+        </if>
+        <where>
+            u.id = #{userId}
+            and u.deleted=0
+            <if test="couponId != null">
+                and c.id=#{couponId}
+                and c.deleted=0
+            </if>
+            <if test="points != null">
+                and u.points >= #{points}
+            </if>
+        </where>
+    </update>
+
+    <select id="count" parameterType="map" resultType="int">
+        select count(1)
+        from User u
+        <where>
+            u.deleted = 0
+            <if test="account != null and account != '' ">
+                AND account = #{account}
+            </if>
+            <if test="mobile != null and mobile != '' ">
+                AND mobile = #{mobile}
+            </if>
+        </where>
+    </select>
+
+</mapper>

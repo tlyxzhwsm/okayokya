@@ -1,0 +1,7 @@
+spring:
+  cloud:
+    config:
+      uri: http://localhost:8888
+      name: service-api-gateway-config
+      label: master
+      profile: dev

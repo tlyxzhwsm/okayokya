@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.okayokya.orderService.dao.OrderDao">
+<select id="select1" resultType="com.okayokya.orderService.model.Order">
+    select * from orders
+</select>
+    <insert id="createOrder" parameterType="Order">
+	insert into orders(id,sn,create_date,deleted,user_id,note,is_point_used,
+	gained_point,used_point,point_deduction_total,prod_total_quantity,prod_total_price,
+	total_price,status,cancel_reason,payment_id,paymethod_code,paymethod_name,address_id
+	,address_consignee,address_detail,address_phone,address_email,dly_method,is_coupon_used
+	,used_coupon_id,used_coupon_msg,coupon_deduction_total,freight,balance_deduction_total
+	,is_balance_used,used_balance)
+	values(#{id},#{deleted},#{createDate},#{deleted},#{userId},#{note},
+	#{isPointUsed},#{gainedPoint},#{usedPoint},#{pointDeductionTotal},#{prodTotalQuantity},
+	#{prodTotalPrice},#{totalPrice},#{status},#{cancelReason},#{paymentId},#{paymentCode},#{paymentName},
+	#{addressId},#{addressConsignee},
+	#{addressDetail},#{addressPhone},#{addressEmail},#{dlyMethod},#{isCouponused},
+	#{usedCouponId},#{usedCouponMsg},#{couponDeductionTotal},#{freight},
+	#{balanceDeductionTotal},#{isBalanceUsed},#{usedBalance})
+ </insert>
+
+        </mapper>
